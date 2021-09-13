@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Model1" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="Model1Container" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="patientSet" EntityType="Model1.patient" />
+    <EntitySet Name="clinicalSet" EntityType="Model1.clinical" />
+    <EntitySet Name="doctorSet" EntityType="Model1.doctor" />
+    <AssociationSet Name="patientclinical" Association="Model1.patientclinical">
+      <End Role="patient" EntitySet="patientSet" />
+      <End Role="clinical" EntitySet="clinicalSet" />
+    </AssociationSet>
+    <AssociationSet Name="doctorclinical" Association="Model1.doctorclinical">
+      <End Role="doctor" EntitySet="doctorSet" />
+      <End Role="clinical" EntitySet="clinicalSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="patient">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="f_name" Type="String" Nullable="false" />
+    <Property Name="l_name" Type="String" Nullable="false" />
+    <Property Name="address" Type="String" Nullable="false" />
+    <Property Name="phone" Type="String" Nullable="false" />
+    <Property Name="email" Type="String" Nullable="false" />
+    <NavigationProperty Name="clinical" Relationship="Model1.patientclinical" FromRole="patient" ToRole="clinical" />
+  </EntityType>
+  <EntityType Name="clinical">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="patient" Relationship="Model1.patientclinical" FromRole="clinical" ToRole="patient" />
+    <Property Name="patientId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="doctor" Relationship="Model1.doctorclinical" FromRole="clinical" ToRole="doctor" />
+    <Property Name="doctorId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="doctor">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="f_name" Type="String" Nullable="false" />
+    <Property Name="l_name" Type="String" Nullable="false" />
+    <Property Name="email" Type="String" Nullable="false" />
+    <Property Name="phone" Type="String" Nullable="false" />
+    <NavigationProperty Name="clinical" Relationship="Model1.doctorclinical" FromRole="doctor" ToRole="clinical" />
+  </EntityType>
+  <Association Name="patientclinical">
+    <End Type="Model1.patient" Role="patient" Multiplicity="1" />
+    <End Type="Model1.clinical" Role="clinical" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="clinical">
+        <PropertyRef Name="patientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="doctorclinical">
+    <End Type="Model1.doctor" Role="doctor" Multiplicity="1" />
+    <End Type="Model1.clinical" Role="clinical" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="doctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="clinical">
+        <PropertyRef Name="doctorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

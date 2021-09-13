@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model1.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="Model1StoreContainer">
+    <EntitySet Name="patientSet" EntityType="Model1.Store.patientSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="clinicalSet" EntityType="Model1.Store.clinicalSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="doctorSet" EntityType="Model1.Store.doctorSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="patientclinical" Association="Model1.Store.patientclinical">
+      <End Role="patient" EntitySet="patientSet" />
+      <End Role="clinical" EntitySet="clinicalSet" />
+    </AssociationSet>
+    <AssociationSet Name="doctorclinical" Association="Model1.Store.doctorclinical">
+      <End Role="doctor" EntitySet="doctorSet" />
+      <End Role="clinical" EntitySet="clinicalSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="patientSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="f_name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="l_name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="address" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="phone" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="email" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="clinicalSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="patientId" Type="int" Nullable="false" />
+    <Property Name="doctorId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="doctorSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="f_name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="l_name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="phone" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="patientclinical">
+    <End Role="patient" Type="Model1.Store.patientSet" Multiplicity="1" />
+    <End Role="clinical" Type="Model1.Store.clinicalSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="clinical">
+        <PropertyRef Name="patientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="doctorclinical">
+    <End Role="doctor" Type="Model1.Store.doctorSet" Multiplicity="1" />
+    <End Role="clinical" Type="Model1.Store.clinicalSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="doctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="clinical">
+        <PropertyRef Name="doctorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
